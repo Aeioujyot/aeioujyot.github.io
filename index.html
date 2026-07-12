@@ -125,9 +125,10 @@
 
   /* ---------- reveal utility ---------- */
   .rv{opacity:0;transform:translateY(46px)}
-  .rv.left{transform:translateX(-60px) rotate(-1.5deg)}
-  .rv.right{transform:translateX(60px) rotate(1.5deg)}
+  .rv.left{transform:translateX(-60px) rotateY(38deg)}
+  .rv.right{transform:translateX(60px) rotateY(-38deg)}
   .rv.pop{transform:scale(.8) rotate(-2deg)}
+  .rv.fold{transform:perspective(900px) rotateX(-72deg) translateY(20px);transform-origin:50% 0}
   .rv.vis{opacity:1;transform:none;transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1);
     transition-delay:var(--d,0s)}
 
@@ -155,7 +156,7 @@
   .stat .t{font-size:.8rem;color:var(--dim);letter-spacing:.05em;text-transform:uppercase}
 
   /* ---------- experience timeline ---------- */
-  .timeline{position:relative;padding-left:0}
+  .timeline{position:relative;padding-left:0;perspective:1200px}
   .tl-rail{position:absolute;left:50%;top:0;bottom:0;width:2px;background:var(--line)}
   .tl-rail .fill{position:absolute;inset:0;background:linear-gradient(var(--mint),var(--amber));
     transform-origin:top;transform:scaleY(0)}
@@ -222,6 +223,10 @@
   .ach:hover{border-color:var(--mint)}
   .ach .big{font-size:1.9rem;display:inline-block;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
   .ach:hover .big{transform:scale(1.35) rotate(-10deg)}
+  .ach::after{content:"";position:absolute;top:0;right:0;border-style:solid;border-width:0 24px 24px 0;
+    border-color:var(--bg) var(--bg) rgba(244,241,232,.14) rgba(244,241,232,.14);
+    transition:border-width .35s cubic-bezier(.2,.8,.2,1)}
+  .ach:hover::after{border-width:0 38px 38px 0}
   .ach h3{font-family:'Syne',sans-serif;font-size:1.05rem;margin:.5rem 0 .2rem}
   .ach p{color:var(--dim);font-size:.87rem}
 
@@ -307,13 +312,15 @@
         <b>Credibl ESG</b> and the <b>United Sikh Movement</b>, and automated invoice management for a real
         restaurant with Claude Code.</p>
       <p class="rv" style="--d:.2s">And because knowledge compounds when shared — I've spent three years coaching
-        <b>FIRST LEGO League</b> robotics teams and founded the STEM Seva tutoring initiative.</p>
+        <b>FIRST LEGO League</b> robotics teams and founded the STEM Seva tutoring initiative.
+        When I need to slow my brain down, I fold <b>origami</b> — same geometry, just in paper.
+        (That's my flock flying around the page.)</p>
     </div>
     <div class="stats">
-      <div class="stat tilt shine rv pop"><div class="n"><span data-count="4">0</span><small>.0</small></div><div class="t">Unweighted GPA</div></div>
-      <div class="stat tilt shine rv pop" style="--d:.08s"><div class="n"><span data-count="4000">0</span>+</div><div class="t">Devices running EcoTeen</div></div>
-      <div class="stat tilt shine rv pop" style="--d:.16s"><div class="n"><span data-count="16">0</span>+</div><div class="t">Robotics students coached</div></div>
-      <div class="stat tilt shine rv pop" style="--d:.24s"><div class="n"><span data-count="4">0</span>×</div><div class="t">SciOly national medals</div></div>
+      <div class="stat tilt shine rv fold"><div class="n"><span data-count="4">0</span><small>.0</small></div><div class="t">Unweighted GPA</div></div>
+      <div class="stat tilt shine rv fold" style="--d:.08s"><div class="n"><span data-count="4000">0</span>+</div><div class="t">Devices running EcoTeen</div></div>
+      <div class="stat tilt shine rv fold" style="--d:.16s"><div class="n"><span data-count="16">0</span>+</div><div class="t">Robotics students coached</div></div>
+      <div class="stat tilt shine rv fold" style="--d:.24s"><div class="n"><span data-count="4">0</span>×</div><div class="t">SciOly national medals</div></div>
     </div>
   </div>
 </section>
@@ -408,12 +415,12 @@
   <div class="sec-label">// section 04 — achievements</div>
   <h2 class="rv decode">Receipts <span class="accent">available on request</span></h2>
   <div class="ach-grid">
-    <div class="ach tilt shine rv pop"><div class="glare"></div><div class="big">🏅</div><h3>Science Olympiad Nationals</h3><p>4× national medalist across events.</p></div>
-    <div class="ach tilt shine rv pop" style="--d:.07s"><div class="glare"></div><div class="big">📐</div><h3>Berkeley Math Tournament</h3><p>4th place nationally in Geometry.</p></div>
-    <div class="ach tilt shine rv pop" style="--d:.14s"><div class="glare"></div><div class="big">💻</div><h3>USACO Platinum</h3><p>2025–2026 Platinum division qualifier.</p></div>
-    <div class="ach tilt shine rv pop" style="--d:.21s"><div class="glare"></div><div class="big">🗣️</div><h3>Public Forum Debate</h3><p>JV State Semi-finalist.</p></div>
-    <div class="ach tilt shine rv pop" style="--d:.28s"><div class="glare"></div><div class="big">🤖</div><h3>Best Coach Award</h3><p>FIRST LEGO League, 2024 &amp; 2025.</p></div>
-    <div class="ach tilt shine rv pop" style="--d:.35s"><div class="glare"></div><div class="big">📱</div><h3>State-Approved App</h3><p>EcoTeen cleared by Illinois for 4,000+ school devices.</p></div>
+    <div class="ach tilt shine rv fold"><div class="glare"></div><div class="big">🏅</div><h3>Science Olympiad Nationals</h3><p>4× national medalist across events.</p></div>
+    <div class="ach tilt shine rv fold" style="--d:.07s"><div class="glare"></div><div class="big">📐</div><h3>Berkeley Math Tournament</h3><p>4th place nationally in Geometry.</p></div>
+    <div class="ach tilt shine rv fold" style="--d:.14s"><div class="glare"></div><div class="big">💻</div><h3>USACO Platinum</h3><p>2025–2026 Platinum division qualifier.</p></div>
+    <div class="ach tilt shine rv fold" style="--d:.21s"><div class="glare"></div><div class="big">🗣️</div><h3>Public Forum Debate</h3><p>JV State Semi-finalist.</p></div>
+    <div class="ach tilt shine rv fold" style="--d:.28s"><div class="glare"></div><div class="big">🤖</div><h3>Best Coach Award</h3><p>FIRST LEGO League, 2024 &amp; 2025.</p></div>
+    <div class="ach tilt shine rv fold" style="--d:.35s"><div class="glare"></div><div class="big">📱</div><h3>State-Approved App</h3><p>EcoTeen cleared by Illinois for 4,000+ school devices.</p></div>
   </div>
 </section>
 
@@ -431,6 +438,7 @@
     <span class="chip rv pop" style="--d:.28s">Fusion 360 · CAD</span>
     <span class="chip rv pop" style="--d:.32s">iOS Development</span>
     <span class="chip rv pop" style="--d:.36s">Claude Code</span>
+    <span class="chip rv pop" style="--d:.40s">Origami 🕊️</span>
   </div>
 </section>
 
@@ -715,7 +723,50 @@ if (renderer) {
     solids.push(m); scene.add(m);
   }
 
-  // slowly rotating starfield
+  // lights for the paper cranes (wireframes use MeshBasicMaterial and ignore these)
+  scene.add(new THREE.HemisphereLight(0xf4f1e8, 0x0b1210, 1.15));
+  const sun = new THREE.DirectionalLight(0xffffff, .55);
+  sun.position.set(2, 5, 3);
+  scene.add(sun);
+
+  // origami cranes: low-poly paper birds that flap across the scene
+  const craneBody = new THREE.BufferGeometry();
+  craneBody.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    // body diamond
+    1.1, 0, 0,    0, .1, .35,   -1.2, .15, 0,
+    1.1, 0, 0,   -1.2, .15, 0,    0, .1, -.35,
+    // neck + head
+    1.05, .02, .06,  1.05, .02, -.06,  1.55, .65, 0,
+    1.55, .65, 0,    1.85, .6, 0,      1.5, .8, 0,
+    // tail
+    -1.15, .13, .06,  -1.15, .13, -.06,  -1.75, .65, 0
+  ]), 3));
+  craneBody.computeVertexNormals();
+  const craneWing = new THREE.BufferGeometry();
+  craneWing.setAttribute('position', new THREE.BufferAttribute(new Float32Array([
+    .35, .1, 0,   -.45, .12, 0,   -.05, .2, 1.55
+  ]), 3));
+  craneWing.computeVertexNormals();
+
+  const paper = c => new THREE.MeshLambertMaterial({ color: c, side: THREE.DoubleSide,
+                                                     transparent: true, opacity: .92 });
+  const cranes = [];
+  const paperColors = [CHALK, CHALK, MINT, AMBER, CHALK];
+  for (let i = 0; i < 5; i++) {
+    const g = new THREE.Group();
+    const mat = paper(paperColors[i]);
+    g.add(new THREE.Mesh(craneBody, mat));
+    const wl = new THREE.Mesh(craneWing, mat);
+    const wr = new THREE.Mesh(craneWing, mat);
+    wr.scale.z = -1;
+    g.add(wl, wr);
+    const s = .45 + Math.random() * .3;
+    g.scale.setScalar(s);
+    g.position.set(-16 + Math.random() * 32, -3 + Math.random() * 7, -2.5 - Math.random() * 4.5);
+    g.userData = { wl, wr, speed: .6 + Math.random() * .7, flap: 4 + Math.random() * 3,
+                   phase: Math.random() * Math.PI * 2, baseY: g.position.y };
+    cranes.push(g); scene.add(g);
+  }
   const N = 400, pos = new Float32Array(N * 3);
   for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - .5) * 46;
   const pts = new THREE.Points(
@@ -752,6 +803,19 @@ if (renderer) {
       s.position.y = s.userData.baseY + y * s.userData.par;
     }
     pts.rotation.y += dt * .02 + vel * .00005;
+
+    // cranes: fly, flap, bob, bank — wrap around when they exit stage right
+    const t = clock.elapsedTime;
+    for (const c of cranes) {
+      const u = c.userData;
+      c.position.x += dt * u.speed * (1 + boost * .2);
+      if (c.position.x > 17) c.position.x = -17;
+      c.position.y = u.baseY + Math.sin(t * .7 + u.phase) * .4 + y * .0009;
+      const flap = Math.sin(t * u.flap * (1 + boost * .3) + u.phase) * .55 + .1;
+      u.wl.rotation.x = -flap;
+      u.wr.rotation.x = flap;
+      c.rotation.z = Math.sin(t * u.flap * .5 + u.phase) * .08;
+    }
 
     cam.position.x += (mx * 1.6 - cam.position.x) * .04;
     cam.position.y += (-my * 1.2 - cam.position.y) * .04;
