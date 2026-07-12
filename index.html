@@ -39,6 +39,11 @@
       linear-gradient(90deg, var(--grid) 1px, transparent 1px);
     background-size:48px 48px;will-change:transform}
 
+  /* ---------- 3D scene + vignette ---------- */
+  #three-bg{position:fixed;inset:0;z-index:0;pointer-events:none}
+  #vignette{position:fixed;inset:0;z-index:2;pointer-events:none;
+    background:radial-gradient(ellipse at center, transparent 55%, rgba(4,8,6,.5))}
+
   /* ---------- custom cursor ---------- */
   #cur,#curring{position:fixed;top:0;left:0;pointer-events:none;z-index:200;border-radius:50%;
     display:none;will-change:transform}
@@ -92,6 +97,7 @@
   h1 .word{display:inline-block;white-space:nowrap;margin-right:.25em}
   h1 .l:hover{transform:translateY(-10px) rotate(-4deg) scale(1.08);color:var(--mint)}
   h1 em{font-style:normal;color:transparent;-webkit-text-stroke:2px var(--amber)}
+  h1{filter:drop-shadow(0 0 34px rgba(255,195,107,.18))}
   @keyframes rise{to{opacity:1;transform:none}}
   .hero-sub{margin-top:1.6rem;max-width:620px;color:var(--dim);font-size:clamp(1rem,1.6vw,1.2rem);
     opacity:0;animation:fadeup 1s ease .9s forwards}
@@ -248,6 +254,8 @@
 <body>
 
 <div id="gridbg" aria-hidden="true"></div>
+<canvas id="three-bg" aria-hidden="true"></canvas>
+<div id="vignette" aria-hidden="true"></div>
 <div id="progress"></div>
 <div id="mathfield" aria-hidden="true"></div>
 <div id="cur" aria-hidden="true"></div>
@@ -466,7 +474,7 @@
   /* ----- floating symbols (parallax + mouse repel) ----- */
   const field = document.getElementById('mathfield');
   const floats = [];
-  for (let k = 0; k < 18; k++) {
+  for (let k = 0; k < 10; k++) {
     const s = document.createElement('span');
     s.className = 'sym';
     s.textContent = SYMS[k % SYMS.length];
@@ -665,6 +673,94 @@
     }
   });
 })();
+</script>
+<script type="module">
+import * as THREE from 'https://unpkg.com/three@0.160.0/build/three.module.js';
+
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const canvas = document.getElementById('three-bg');
+let renderer = null;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+} catch (e) { canvas.remove(); }
+
+if (renderer) {
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 1.75));
+  renderer.setSize(innerWidth, innerHeight);
+  const scene = new THREE.Scene();
+  const cam = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, .1, 120);
+  cam.position.z = 9;
+
+  const MINT = 0x6ee7b7, AMBER = 0xffc36b, CHALK = 0xf4f1e8;
+  const wire = (color, opacity) =>
+    new THREE.MeshBasicMaterial({ color, wireframe: true, transparent: true, opacity });
+
+  // centerpiece: spinning torus knot, offset right so hero text stays readable
+  const knot = new THREE.Mesh(new THREE.TorusKnotGeometry(2.3, .65, 200, 26), wire(MINT, .16));
+  knot.position.set(3.2, 0, -2);
+  scene.add(knot);
+
+  // floating platonic solids
+  const shapes = [
+    new THREE.IcosahedronGeometry(.8), new THREE.OctahedronGeometry(.7),
+    new THREE.TetrahedronGeometry(.75), new THREE.DodecahedronGeometry(.7),
+    new THREE.TorusGeometry(.55, .22, 10, 24), new THREE.ConeGeometry(.55, .9, 6)
+  ];
+  const solids = [];
+  for (let i = 0; i < 14; i++) {
+    const m = new THREE.Mesh(shapes[i % shapes.length], wire(i % 2 ? AMBER : MINT, .3));
+    m.position.set((Math.random() - .5) * 16, (Math.random() - .5) * 12, -1 - Math.random() * 6);
+    m.userData = { sx: (Math.random() - .5) * .9, sy: (Math.random() - .5) * .9,
+                   baseY: m.position.y, par: .0008 + Math.random() * .002 };
+    solids.push(m); scene.add(m);
+  }
+
+  // slowly rotating starfield
+  const N = 400, pos = new Float32Array(N * 3);
+  for (let i = 0; i < N * 3; i++) pos[i] = (Math.random() - .5) * 46;
+  const pts = new THREE.Points(
+    new THREE.BufferGeometry().setAttribute('position', new THREE.BufferAttribute(pos, 3)),
+    new THREE.PointsMaterial({ color: CHALK, size: .05, transparent: true, opacity: .5 })
+  );
+  scene.add(pts);
+
+  let mx = 0, my = 0, boost = 0, lastY = scrollY;
+  addEventListener('mousemove', e => {
+    mx = e.clientX / innerWidth - .5; my = e.clientY / innerHeight - .5;
+  }, { passive: true });
+  addEventListener('resize', () => {
+    cam.aspect = innerWidth / innerHeight; cam.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight);
+  });
+  // easter egg tie-in: logo click sends everything into hyperspin
+  document.getElementById('logo').addEventListener('click', () => { boost = 22; });
+
+  const clock = new THREE.Clock();
+  function render() {
+    const dt = Math.min(clock.getDelta(), .05);
+    const y = scrollY, vel = y - lastY; lastY = y;
+    boost = Math.max(0, boost - dt * 14);
+
+    knot.rotation.x += dt * (.25 + boost);
+    knot.rotation.y += dt * (.4 + boost * 1.4) + vel * .0006;
+    knot.position.y = y * .0006;
+    knot.scale.setScalar(1 + Math.min(.35, y * .0002));
+
+    for (const s of solids) {
+      s.rotation.x += dt * s.userData.sx * (1 + boost * .5);
+      s.rotation.y += dt * s.userData.sy * (1 + boost * .5);
+      s.position.y = s.userData.baseY + y * s.userData.par;
+    }
+    pts.rotation.y += dt * .02 + vel * .00005;
+
+    cam.position.x += (mx * 1.6 - cam.position.x) * .04;
+    cam.position.y += (-my * 1.2 - cam.position.y) * .04;
+    cam.lookAt(0, 0, 0);
+    renderer.render(scene, cam);
+    if (!reduced) requestAnimationFrame(render);
+  }
+  render(); // reduced-motion users get a single static frame
+}
 </script>
 </body>
 </html>
